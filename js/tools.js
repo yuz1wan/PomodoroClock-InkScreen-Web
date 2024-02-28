@@ -11,6 +11,7 @@ let isPlay = false;
 let isRest = false;
 let isShowPlan = false;
 let isClock = false;
+let showSecond = false;
 let localData = {};
 let today = null;
 let res_time = t_study;
@@ -92,19 +93,43 @@ function showRestTime(){
     else {
         $("#n2").css("transform","none");
     }
-    $("#n4").text(arr[2]);
-    if(arr[2]==1){
-        $("#n4").css("transform","translate(30%)");
+    if(showSecond){
+        $("#n4").text(arr[2]);
+        if(arr[2]==1){
+            $("#n4").css("transform","translate(30%)");
+        }
+        else {
+            $("#n4").css("transform","none");
+        }
+        $("#n5").text(arr[3]);
+        if(arr[3]==1){
+            $("#n5").css("transform","translate(30%)");
+        }
+        else {
+            $("#n5").css("transform","none");
+        }
     }
-    else {
-        $("#n4").css("transform","none");
-    }
-    $("#n5").text(arr[3]);
-    if(arr[3]==1){
-        $("#n5").css("transform","translate(30%)");
-    }
-    else {
-        $("#n5").css("transform","none");
+    else{
+        // $("#n4").text(0);
+        // $("#n5").text(0);
+        
+        if((arr[2]*10+arr[3])==59 || (arr[2]*10+arr[3])==29){
+            $("#n4").text(arr[2]);
+            if(arr[2]==1){
+                $("#n4").css("transform","translate(30%)");
+            }
+            else {
+                $("#n4").css("transform","none");
+            }
+            $("#n5").text(arr[3]);
+            if(arr[3]==1){
+                $("#n5").css("transform","translate(30%)");
+            }
+            else {
+                $("#n5").css("transform","none");
+            }
+        }
+        
     }
 }
 //更新现在的时间和电量
@@ -117,12 +142,25 @@ function showNowTime(){
     let s = t.getSeconds();
     s = s < 10 ? "0" + s : s;
     if(navigator.getBattery){
-        navigator.getBattery().then((result)=>{
-            $(".now-time").text(h + ":" + m + ":" + s +"  电量:"+parseInt(result.level*100)+"%") ;
-        })
+        if(showSecond){
+            navigator.getBattery().then((result)=>{
+                $(".now-time").text(h + ":" + m + ":" + s +"  电量:"+parseInt(result.level*100)+"%") ;
+            })
+        }
+        else{
+            navigator.getBattery().then((result)=>{
+                $(".now-time").text(h + ":" + m +"  电量:"+parseInt(result.level*100)+"%") ;
+            })
+        }
     }
     else {
-        $(".now-time").text(h + ":" + m + ":" + s);
+        if(showSecond){
+            $(".now-time").text(h + ":" + m + ":" + s);
+        }
+        else{
+            $(".now-time").text(h + ":" + m);
+        }
+        
     }
     //是否开启钟表模式
     if(isClock){
@@ -185,11 +223,18 @@ function saveStudyTime(){
 }
 //更新今天已学习时间
 function showStudyTime(){
-    $(".top-right").text("今天已学习:" +
-    String(Math.floor(study_time / 60)) +
-    "分钟" +
-    String(study_time % 60) +
-    "秒");
+    if(showSecond){
+        $(".top-right").text("今天已学习:" +
+        String(Math.floor(study_time / 60)) +
+        "分钟" +
+        String(study_time % 60) +
+        "秒");
+    }
+    else{
+        $(".top-right").text("今天已学习:" +
+        String(Math.floor(study_time / 60)) +
+        "分钟");
+    }
 }
 
 //更新最上面一栏

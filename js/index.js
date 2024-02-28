@@ -35,6 +35,7 @@ $(()=>{
     $(".top-center").on("click",()=>{
         isClock = !isClock;
         showNowTime();
+        //showRestTime();
     });
     //播放按钮
     $(".play").on("click",()=>{
@@ -77,22 +78,31 @@ $(()=>{
         $(".page").hide();
         $(".p4").show();
     });
-    //查看学习历史
+    //是否显示秒数
     $(".p2 .option").eq(2).on("click",()=>{
+        showSecond = !showSecond;
+        if(showSecond){
+            alert("已开启秒数显示！请注意，秒数显示会增加电量消耗！");
+        }
+        else{
+            alert("已关闭秒数显示！");
+        }
+    });
+    //查看学习历史
+    $(".p2 .option").eq(3).on("click",()=>{
         $(".page").hide();
         $(".p5").show();
         myChart = showEcharts();
     });
     //清除本地数据
-    $(".p2 .option").eq(3).on("click",()=>{
+    $(".p2 .option").eq(4).on("click",()=>{
         window.localStorage.clear();
         localData = [];
         
-
         alert("已清除！");
     });
     //返回
-    $(".p2 .option").eq(4).on("click",()=>{
+    $(".p2 .option").eq(5).on("click",()=>{
         $(".page").hide();
         $(".p1").show();
     });
@@ -159,14 +169,16 @@ $(()=>{
             }
         }
         //如果在播放
-        if (isPlay && !isClock){
+        if (isPlay){
             if(!isRest){
                 $(".top-left").html(icon_study+"学习中");
                 study_time++;
             }
             res_time--;
             saveStudyTime();
-            showRestTime(); 
+            if(!isClock){
+                showRestTime(); 
+            }
         }
     },1000);
 });
