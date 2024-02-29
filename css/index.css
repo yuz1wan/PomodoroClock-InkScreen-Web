@@ -23,6 +23,9 @@ ul, ol {
     display: flex;
 }
 /* 设置版心并居中 */
+body {
+    transform: rotate(90deg);
+}
 .w {
     position: absolute;
     top:50%;
